@@ -1,31 +1,32 @@
 module.exports = function(config) {
 
   // Browsers to run on Sauce Labs
+
+  var PROJECT_NAME = "YOUR_PROJECT_NAME";
+  var TUNNEL_IDENTIFIER = "YOUR_TUNNEL_IDENTIFIER";
+  var HOSTNAME = "YOUR_HOSTNAME";
+  var SAUCE_RDC_USERNAME = "USERNAME";
+  var SAUCE_RDC_USER_API_KEY = "ACCESS_KEY"
+
   var customLaunchers = {
-    'SL_Chrome': {
-      base: 'SauceLabs',
-      browserName: 'chrome',
-      version: '68.0',
-      platform: 'OS X 10.12'
-    },
-    'SL_Firefox': {
-      base: 'SauceLabs',
-      browserName: 'firefox',
-      version: '64.0',
-      platform: 'Windows 10'
-    },
-    'SL_InternetExplorer': {
-      base: 'SauceLabs',
-      browserName: 'internet explorer',
-      version: '11.0',
-      platform: 'Windows 7'
-    },
-    'SL_Safari': {
+    'RDC_iOS': {
       base: 'SauceLabs',
       browserName: 'safari',
-      platform: 'OS X 10.12',
-      version: '11.0'
-    }
+      platformName: 'iOS',
+      projectName: PROJECT_NAME,
+      //TODO: Doesn't work. Need to find a way to change tunnel-identifier to tunnelIdentifier 
+      // from the custom setting karma already has
+      tunnelIdentifier: TUNNEL_IDENTIFIER
+    },
+    'RDC_iOS': {
+      base: 'SauceLabs',
+      browserName: 'chrome',
+      platformName: 'Android',
+      projectName: PROJECT_NAME,
+      //TODO: Doesn't work. Need to find a way to change tunnel-identifier to tunnelIdentifier 
+      // from the custom setting karma already has
+      tunnelIdentifier: TUNNEL_IDENTIFIER
+    },
   };
 
   config.set({
@@ -33,7 +34,7 @@ module.exports = function(config) {
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
 
-
+    hostname: HOSTNAME,
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['jasmine'],
@@ -62,7 +63,18 @@ module.exports = function(config) {
     logLevel: config.LOG_INFO,
 
     sauceLabs: {
-      testName: 'Karma and Sauce Labs demo'
+      username: SAUCE_RDC_USERNAME,
+      accessKey: SAUCE_RDC_USER_API_KEY,
+      testName: 'Karma and Sauce Labs demo',
+      connectLocationForSERelay: "us1.appium.testobject.com",
+      connectPortForSERelay: 80,
+      tunnelIdentifier: TUNNEL_IDENTIFIER,
+      connectOptions: {
+        restUrl: 'https://us1.api.testobject.com/sc/rest/v1',
+        verboseDebugging: true,
+        verbose: true,
+        noSslBumpDomains: "all"
+      }
     },
     captureTimeout: 120000,
     customLaunchers: customLaunchers,
